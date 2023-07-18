@@ -1,11 +1,14 @@
-from collections import namedtuple
+
 
 from flask import Flask, render_template, redirect, url_for, request
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://postgres:123@localhost/py_sweater"
+db = SQLAlchemy(app)
 
-Message = namedtuple('Message', 'text tag')
-message = []
+
 
 @app.route("/", methods=['GET'])
 def hello_world():
