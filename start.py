@@ -1,13 +1,27 @@
-from flask import Flask
+from collections import namedtuple
+
+from flask import Flask, render_template, redirect, url_for, request
 
 app = Flask(__name__)
 
+Message = namedtuple('Message', 'text tag')
+message = []
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template('index.html')
 
 
-@app.route('/main')
+@app.route('/main', methods=['GET'])
 def main():
-    return 'main'
+    return render_template('main.html', message=message)
+
+
+@app.route('/add_message', methods=['POST'])
+def add_message():
+    text = request.form['text']
+    tag = request.form['tag']
+
+    message.append(Message(text, tag))
+
+    return redirect(url_for('main'))
